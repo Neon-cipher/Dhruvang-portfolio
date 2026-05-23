@@ -34,17 +34,36 @@ const Layout = () => {
 
       {/* Mobile Side-out Navigation Drawer */}
       <div className={`mobile-menu-drawer ${isMobileMenuOpen ? 'open' : ''}`}>
-        <NavLink to="/" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>Home</NavLink>
-        <NavLink to="/skills" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>Skills</NavLink>
-        <NavLink to="/projects" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>Projects</NavLink>
-        <NavLink to="/blogs" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>Blogs</NavLink>
-        <NavLink to="/contact" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>Contact</NavLink>
+        {/* Mobile Drawer Close Button */}
+        <button 
+          onClick={() => setIsMobileMenuOpen(false)}
+          style={{
+            position: 'absolute',
+            top: '1.5rem',
+            right: '1.5rem',
+            background: 'transparent',
+            border: 'none',
+            color: 'var(--primary-color)',
+            cursor: 'pointer',
+            outline: 'none',
+            padding: '0.25rem'
+          }}
+          title="Close Menu"
+        >
+          <X size={24} />
+        </button>
+
+        <NavLink to="/" className={({isActive}) => isActive ? "mobile-nav-link active-link" : "mobile-nav-link"} onClick={() => setIsMobileMenuOpen(false)}>Home</NavLink>
+        <NavLink to="/skills" className={({isActive}) => isActive ? "mobile-nav-link active-link" : "mobile-nav-link"} onClick={() => setIsMobileMenuOpen(false)}>Skills</NavLink>
+        <NavLink to="/projects" className={({isActive}) => isActive ? "mobile-nav-link active-link" : "mobile-nav-link"} onClick={() => setIsMobileMenuOpen(false)}>Projects</NavLink>
+        <NavLink to="/blogs" className={({isActive}) => isActive ? "mobile-nav-link active-link" : "mobile-nav-link"} onClick={() => setIsMobileMenuOpen(false)}>Blogs</NavLink>
+        <NavLink to="/contact" className={({isActive}) => isActive ? "mobile-nav-link active-link" : "mobile-nav-link"} onClick={() => setIsMobileMenuOpen(false)}>Contact</NavLink>
       </div>
 
       {/* Navigation Layer */}
       <nav style={{ position: 'fixed', top: 0, width: '100%', padding: '1.5rem', zIndex: 100, background: 'linear-gradient(var(--bg-color) 40%, transparent)' }}>
         <div className="container flex justify-between items-center">
-          <NavLink to="/" className="mono text-primary outline-none" style={{ fontSize: '1.2rem', fontWeight: 'bold' }} onClick={() => setIsMobileMenuOpen(false)}>
+          <NavLink to="/" className="mono text-primary outline-none logo-text" onClick={() => setIsMobileMenuOpen(false)}>
             <span style={{ color: 'var(--text-main)' }}>~</span>/dhruvang&gt; <span className="cursor-blink" style={{ width: '8px', height: '1.2rem', display: 'inline-block', background: 'var(--primary-color)', verticalAlign: 'middle' }}></span>
           </NavLink>
           
