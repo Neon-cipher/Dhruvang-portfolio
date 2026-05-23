@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import { Sun, Moon } from 'lucide-react';
+import { Sun, Moon, Menu, X } from 'lucide-react';
 import MatrixBackground from './MatrixBackground';
 
 const Layout = () => {
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('theme') || 'dark';
   });
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -25,12 +26,28 @@ const Layout = () => {
       {/* CRT Scanline Overlay */}
       <div className="scanlines flicker"></div>
 
+      {/* Mobile Menu Backdrop Overlay */}
+      <div 
+        className={`mobile-menu-overlay ${isMobileMenuOpen ? 'open' : ''}`}
+        onClick={() => setIsMobileMenuOpen(false)}
+      />
+
+      {/* Mobile Side-out Navigation Drawer */}
+      <div className={`mobile-menu-drawer ${isMobileMenuOpen ? 'open' : ''}`}>
+        <NavLink to="/" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>Home</NavLink>
+        <NavLink to="/skills" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>Skills</NavLink>
+        <NavLink to="/projects" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>Projects</NavLink>
+        <NavLink to="/blogs" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>Blogs</NavLink>
+        <NavLink to="/contact" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>Contact</NavLink>
+      </div>
+
       {/* Navigation Layer */}
       <nav style={{ position: 'fixed', top: 0, width: '100%', padding: '1.5rem', zIndex: 100, background: 'linear-gradient(var(--bg-color) 40%, transparent)' }}>
         <div className="container flex justify-between items-center">
-          <NavLink to="/" className="mono text-primary outline-none" style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
-            <span style={{ color: 'var(--text-main)' }}>~</span>/dhruv&gt; <span className="cursor-blink" style={{ width: '8px', height: '1.2rem', display: 'inline-block', background: 'var(--primary-color)', verticalAlign: 'middle' }}></span>
+          <NavLink to="/" className="mono text-primary outline-none" style={{ fontSize: '1.2rem', fontWeight: 'bold' }} onClick={() => setIsMobileMenuOpen(false)}>
+            <span style={{ color: 'var(--text-main)' }}>~</span>/dhruvang&gt; <span className="cursor-blink" style={{ width: '8px', height: '1.2rem', display: 'inline-block', background: 'var(--primary-color)', verticalAlign: 'middle' }}></span>
           </NavLink>
+          
           <div className="flex items-center gap-4">
             <div className="flex gap-4 mono text-muted hidden-mobile">
               <NavLink to="/" className={({isActive}) => isActive ? "nav-link active-link" : "nav-link"}>Home</NavLink>
@@ -64,6 +81,24 @@ const Layout = () => {
               {theme === 'dark' ? <Sun size={13} /> : <Moon size={13} />}
               <span>{theme === 'dark' ? 'LIGHT' : 'DARK'}</span>
             </button>
+
+            {/* Hamburger Mobile Menu Toggle */}
+            <button 
+              onClick={() => setIsMobileMenuOpen(prev => !prev)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: 'var(--primary-color)',
+                cursor: 'pointer',
+                outline: 'none',
+                zIndex: 201,
+                padding: '0.25rem'
+              }}
+              className="mobile-menu-toggle"
+              title="Toggle Navigation Menu"
+            >
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
         </div>
       </nav>
@@ -76,14 +111,18 @@ const Layout = () => {
       {/* Footer */}
       <footer style={{ textAlign: 'center', padding: '2rem', borderTop: '1px solid var(--surface-hover)' }}>
         <p className="mono text-muted" style={{ fontSize: '0.9rem' }}>
-          Built by Dhruv<br/>
+          Built by Dhruvang<br/>
           <span style={{ color: 'var(--primary-color)' }}>system.exit(0)</span>
         </p>
       </footer>
       
       <style>{`
+        .mobile-menu-toggle {
+          display: none;
+        }
         @media (max-width: 768px) {
           .hidden-mobile { display: none; }
+          .mobile-menu-toggle { display: block !important; }
         }
         .nav-link {
           transition: var(--transition);

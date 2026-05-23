@@ -16,7 +16,7 @@ const Projects = () => {
     <section id="projects" className="container" style={{ padding: '6rem 2rem' }}>
       <h2 className="section-title">Latest_Operations</h2>
 
-      <div className="grid grid-cols-2" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))' }}>
+      <div className="grid grid-cols-2">
         {projects.map((project, index) => (
           <div key={index} className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <div className="flex justify-between items-center">
