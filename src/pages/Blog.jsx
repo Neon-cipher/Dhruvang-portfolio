@@ -4,25 +4,11 @@ import { Terminal, BookOpen, Clock } from 'lucide-react';
 const blogPosts = [
   {
     id: 1,
-    title: 'Dissecting Modern WAF Bypasses',
-    date: '2026-03-15',
-    category: 'Vulnerability Research',
-    excerpt: 'A deep dive into how poorly configured Web Application Firewalls can be bypassed using obfuscation and chunked encoding.',
+    title: 'The AI Assistant in Your Terminal Might Be Working for the Bad Guys',
+    date: '2026-05-24',
+    category: 'AI/ML, Cyber Security',
+    excerpt: 'Let’s be honest, we all love how fast AI is moving.',
   },
-  {
-    id: 2,
-    title: 'Zero Trust Architecture in Practice',
-    date: '2026-01-20',
-    category: 'Infrastructure',
-    excerpt: 'Transitioning a legacy corporate network into a Zero Trust model: challenges, solutions, and why VPNs are no longer enough.',
-  },
-  {
-    id: 3,
-    title: 'Reverse Engineering IoT Firmware',
-    date: '2025-11-10',
-    category: 'Reverse Engineering',
-    excerpt: 'Extracting and analyzing firmware from a smart camera to discover hardcoded backdoor credentials.',
-  }
 ];
 
 const Blog = () => {
