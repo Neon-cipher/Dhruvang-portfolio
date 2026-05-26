@@ -1,35 +1,35 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --bg-color: #050b14;
-  --surface-color: #0b1320;
-  --surface-hover: #111e30;
-  --primary-color: #00ff66;
+  --bg-color: #0a0f1d;
+  --surface-color: #111827;
+  --surface-hover: #1f2937;
+  --primary-color: #10b981; /* High-contrast Emerald Green */
   --secondary-color: #0ea5e9;
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --border-color: rgba(0, 255, 102, 0.2);
-  --glow-shadow: 0 0 10px rgba(0, 255, 102, 0.5);
-  --radar-sweep: rgba(0, 255, 102, 0.15);
+  --text-main: #f3f4f6;
+  --text-muted: #9ca3af;
+  --border-color: rgba(16, 185, 129, 0.15);
+  --glow-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  --radar-sweep: rgba(16, 185, 129, 0.08);
   
   --font-sans: 'Inter', sans-serif;
   --font-mono: 'Fira Code', monospace;
   
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Light Theme Variables definition */
 [data-theme="light"] {
   --bg-color: #f8fafc;
   --surface-color: #ffffff;
-  --surface-hover: #e2e8f0;
+  --surface-hover: #f1f5f9;
   --primary-color: #059669; /* Rich Emerald Green */
   --secondary-color: #0284c7; /* Cyber Ocean Blue */
   --text-main: #0f172a;
   --text-muted: #475569;
-  --border-color: rgba(5, 150, 105, 0.25);
-  --glow-shadow: 0 0 10px rgba(5, 150, 105, 0.2);
-  --radar-sweep: rgba(5, 150, 105, 0.15);
+  --border-color: rgba(5, 150, 105, 0.18);
+  --glow-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+  --radar-sweep: rgba(5, 150, 105, 0.06);
 }
 
 * {
@@ -243,42 +243,14 @@ a:hover {
   text-shadow: 2px 0 var(--secondary-color), -2px 0 red;
 }
 
-/* Scanline overlay representing a high-tech terminal monitor */
+/* Scanline overlay disabled for clean, non-glare visual comfort */
 .scanlines {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: linear-gradient(
-    rgba(18, 16, 16, 0) 50%, 
-    rgba(0, 0, 0, 0.08) 50%
-  ), linear-gradient(
-    90deg,
-    rgba(0, 255, 102, 0.01),
-    rgba(14, 165, 233, 0.005),
-    rgba(0, 255, 102, 0.01)
-  );
-  background-size: 100% 4px, 6px 100%;
-  z-index: 9999;
-  pointer-events: none;
-  opacity: 0.25; /* extremely faint so it never strains eyes in dark mode */
-  transition: opacity 0.3s ease;
+  display: none !important;
 }
 
-[data-theme="light"] .scanlines {
-  display: none; /* completely disabled in light mode to ensure perfectly clean readability */
-}
-
-/* Subtle CRT screen flicker */
+/* Flicker animation disabled */
 .flicker {
-  animation: crt-flicker 0.25s infinite;
-}
-
-@keyframes crt-flicker {
-  0% { opacity: 0.98; }
-  50% { opacity: 1; }
-  100% { opacity: 0.98; }
+  animation: none !important;
 }
 
 /* Cyber Terminal Container */

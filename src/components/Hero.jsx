@@ -1,119 +1,144 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Terminal as TerminalIcon, Shield, Lock, Cpu, Server, Wifi } from 'lucide-react';
-
-const terminalSequences = [
-  { type: 'cmd', text: 'nmap -sS -sV -p 80,22,443 10.0.8.2' },
-  { type: 'log', text: 'PORT    STATE SERVICE  VERSION' },
-  { type: 'log', text: '22/tcp  open  ssh      OpenSSH 8.9p1' },
-  { type: 'log', text: '80/tcp  open  http     Nginx 1.22.1' },
-  { type: 'log', text: '443/tcp open  ssl/http Nginx 1.22.1' },
-  { type: 'cmd', text: 'python3 exploit_ssh_auth.py --target 10.0.8.2' },
-  { type: 'log', text: '[*] Starting authorization bypass attempt...' },
-  { type: 'log', text: '[*] Checking server keys for RSA vulnerability...' },
-  { type: 'log', text: '[+] Vulnerable signature verification detected!' },
-  { type: 'log', text: '[+] Injecting exploit payload: 0x7fff8b2a...' },
-  { type: 'log', text: 'SUCCESS: Remote Shell access established.' },
-  { type: 'cmd', text: './dhruvang_portfolio.sh' },
-  { type: 'log', text: '=========================================' },
-  { type: 'log', text: '  WELCOME TO DHRUVANG\'S SEC-OPS TERMINAL  ' },
-  { type: 'log', text: '  STATUS: ACTIVE | POSITION: SEC-LEAD    ' },
-  { type: 'log', text: '=========================================' },
-  { type: 'log', text: 'Initializing interactive portfolio module...' },
-  { type: 'log', text: 'system.status = "SECURE" [100% DEFENDED]' },
-];
+import { Terminal as TerminalIcon, Shield, ChevronRight, Cpu, GitCommit, Award, MapPin } from 'lucide-react';
 
 const Hero = () => {
-  const [terminalLines, setTerminalLines] = useState([]);
-  const [activeSeqIndex, setActiveSeqIndex] = useState(0);
-  const [currentTypedText, setCurrentTypedText] = useState('');
-  const [charIndex, setCharIndex] = useState(0);
+  // Interactive CLI Shell State
+  const [inputVal, setInputVal] = useState('');
+  const [history, setHistory] = useState([
+    { type: 'log', text: '==================================================' },
+    { type: 'log', text: '  DHRUVANG SANGHAVI - SECURITY OPERATIONS CONSOLE ' },
+    { type: 'log', text: '  STATUS: ACTIVE | TARGET: SEC_AUDIT_PORTAL       ' },
+    { type: 'log', text: '==================================================' },
+    { type: 'log', text: 'Type "help" to view a list of operational commands.' },
+  ]);
+  const [cmdHistory, setCmdHistory] = useState([]);
+  const [cmdHistoryIndex, setCmdHistoryIndex] = useState(-1);
+
   const terminalBodyRef = useRef(null);
+  const inputRef = useRef(null);
 
   // Auto-scroll terminal body to bottom
   useEffect(() => {
     if (terminalBodyRef.current) {
       terminalBodyRef.current.scrollTop = terminalBodyRef.current.scrollHeight;
     }
-  }, [terminalLines, currentTypedText]);
+  }, [history]);
 
-  // Terminal Typing & Processing loop
-  useEffect(() => {
-    if (activeSeqIndex >= terminalSequences.length) {
-      // Loop sequence after a short delay
-      const resetTimeout = setTimeout(() => {
-        setTerminalLines([]);
-        setActiveSeqIndex(0);
-        setCurrentTypedText('');
-        setCharIndex(0);
-      }, 5000);
-      return () => clearTimeout(resetTimeout);
+  // Focus terminal input on click
+  const focusInput = () => {
+    if (inputRef.current) {
+      inputRef.current.focus();
     }
+  };
 
-    const currentSeq = terminalSequences[activeSeqIndex];
+  // Keyboard commands listener
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      const trimmedCmd = inputVal.trim().toLowerCase();
+      if (!trimmedCmd) return;
 
-    if (currentSeq.type === 'cmd') {
-      if (charIndex < currentSeq.text.length) {
-        const typeTimeout = setTimeout(() => {
-          setCurrentTypedText(prev => prev + currentSeq.text[charIndex]);
-          setCharIndex(prev => prev + 1);
-        }, 60 + Math.random() * 40); // realistic variance in typing
-        return () => clearTimeout(typeTimeout);
-      } else {
-        // Command completed typing. Push to list and move to next
-        const pauseTimeout = setTimeout(() => {
-          setTerminalLines(prev => [...prev, { type: 'cmd', text: currentSeq.text }]);
-          setCurrentTypedText('');
-          setCharIndex(0);
-          setActiveSeqIndex(prev => prev + 1);
-        }, 500);
-        return () => clearTimeout(pauseTimeout);
+      // Add command to history
+      const newHistory = [...history, { type: 'cmd', text: inputVal }];
+      setCmdHistory(prev => [inputVal, ...prev]);
+      setCmdHistoryIndex(-1);
+
+      // Process command
+      switch (trimmedCmd) {
+        case 'help':
+          newHistory.push(
+            { type: 'log', text: 'Available commands:' },
+            { type: 'log', text: '  about    - Summary of technical background and mission' },
+            { type: 'log', text: '  skills   - Core technical competencies and tooling' },
+            { type: 'log', text: '  projects - Technical operations and development logs' },
+            { type: 'log', text: '  contact  - Secure connection transmissions' },
+            { type: 'log', text: '  clear    - Clear console screen history' }
+          );
+          break;
+        case 'about':
+          newHistory.push(
+            { type: 'log', text: 'Dhruvang Sanghavi | Cybersecurity Specialist & Dev' },
+            { type: 'log', text: 'I specialize in penetration testing, threat hunting, and digital forensics.' },
+            { type: 'log', text: 'My core focus is automation in security operations: building tools that' },
+            { type: 'log', text: 'automate incident response, forensic triage, and malware sandbox analysis.' }
+          );
+          break;
+        case 'skills':
+          newHistory.push(
+            { type: 'log', text: 'Core Arsenal:' },
+            { type: 'log', text: '  [Offensive] - Pen-testing, OWASP Top 10, Network Recon, Nmap, Wireshark' },
+            { type: 'log', text: '  [Defensive] - Digital Forensics, Artifact Analysis, Cuckoo Sandbox, YARA' },
+            { type: 'log', text: '  [Coding]    - Python, Bash, Rust, secure SDLC integration' }
+          );
+          break;
+        case 'projects':
+          newHistory.push(
+            { type: 'log', text: 'Latest Tool Integrations:' },
+            { type: 'log', text: '  - VORTEX Forensics Engine: Modular artifact triage & normalization (Python)' },
+            { type: 'log', text: '  - Malware Sandbox Pipeline: Cuckoo integration & automated YARA generation' },
+            { type: 'log', text: '  - Zero-Day Fuzzer: Network protocol memory corruption fuzzer (Rust)' },
+            { type: 'log', text: 'Type "projects" inside navbar menu for deep-dives.' }
+          );
+          break;
+        case 'contact':
+          newHistory.push(
+            { type: 'log', text: 'Establish connection:' },
+            { type: 'log', text: '  - Mail: dhruvangsanghavi13@gmail.com' },
+            { type: 'log', text: '  - LinkedIn: linkedin.com/in/dhruvang-sanghavi-342108308' }
+          );
+          break;
+        case 'clear':
+          setHistory([]);
+          setInputVal('');
+          return;
+        default:
+          newHistory.push({ type: 'log', text: `shell: command not found: "${trimmedCmd}". Type "help" for options.` });
       }
-    } else {
-      // It's a log line. Dump instantly after a microsecond delay
-      const dumpTimeout = setTimeout(() => {
-        setTerminalLines(prev => [...prev, { type: 'log', text: currentSeq.text }]);
-        setActiveSeqIndex(prev => prev + 1);
-      }, 150 + Math.random() * 150); // slight simulation delay
-      return () => clearTimeout(dumpTimeout);
-    }
-  }, [activeSeqIndex, charIndex]);
 
-  // Radar ping simulator
-  const [pingPos, setPingPos] = useState({ top: '30%', left: '70%', show: true });
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // generate random coordinates within the radar limits
-      const angle = Math.random() * Math.PI * 2;
-      const radius = Math.random() * 120; // max radius 150px
-      const x = 175 + Math.cos(angle) * radius - 4; // offset half ping width
-      const y = 175 + Math.sin(angle) * radius - 4;
-      setPingPos({ top: `${y}px`, left: `${x}px`, show: true });
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
+      setHistory(newHistory);
+      setInputVal('');
+    } else if (e.key === 'ArrowUp') {
+      // History recall
+      e.preventDefault();
+      if (cmdHistory.length > 0 && cmdHistoryIndex < cmdHistory.length - 1) {
+        const nextIdx = cmdHistoryIndex + 1;
+        setCmdHistoryIndex(nextIdx);
+        setInputVal(cmdHistory[nextIdx]);
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (cmdHistoryIndex > 0) {
+        const nextIdx = cmdHistoryIndex - 1;
+        setCmdHistoryIndex(nextIdx);
+        setInputVal(cmdHistory[nextIdx]);
+      } else if (cmdHistoryIndex === 0) {
+        setCmdHistoryIndex(-1);
+        setInputVal('');
+      }
+    }
+  };
 
   return (
     <section className="container flex items-center justify-between" style={{ minHeight: '100vh', paddingTop: '100px', paddingBottom: '3rem', flexWrap: 'wrap', gap: '3rem' }}>
       <div className="hero-content animate-fade-in" style={{ flex: '1 1 500px', maxWidth: '650px' }}>
-        <p className="mono text-primary" style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600 }}>
-          <TerminalIcon size={18} />
+        <p className="mono text-primary" style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, fontSize: '0.9rem' }}>
+          <TerminalIcon size={16} />
           <span>secops.terminal.initiate("guest")</span>
         </p>
 
-        <h1 className="glitch-text" data-text="Securing the Digital Frontier" style={{ fontSize: 'clamp(2.3rem, 5vw, 3.8rem)', marginBottom: '1rem', color: 'var(--text-main)', lineHeight: 1.1 }}>
-          Securing the <span className="text-secondary">Digital Frontier</span>
+        <h1 style={{ fontSize: 'clamp(2.3rem, 5vw, 3.8rem)', marginBottom: '1rem', color: 'var(--text-main)', lineHeight: 1.1, fontWeight: '700' }}>
+          Securing Systems & <span className="text-secondary">Automating Defenses</span>
         </h1>
 
-        <h2 className="text-muted mono" style={{ fontSize: 'clamp(1rem, 2vw, 1.4rem)', marginBottom: '1.5rem', fontWeight: '500', color: 'var(--primary-color)' }}>
-          &gt;_ Cybersecurity Specialist & Pentester
+        <h2 className="text-muted mono" style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)', marginBottom: '1.5rem', fontWeight: '500', color: 'var(--primary-color)' }}>
+          &gt; Cybersecurity Analyst & Digital forensics investigator
         </h2>
 
-        <p style={{ maxWidth: '600px', marginBottom: '2.5rem', fontSize: '1.05rem', color: 'var(--text-muted)', lineHeight: '1.7' }}>
-          Welcome to my secure terminal. I conduct vulnerability research, penetration testing, and build threat intelligence dashboards to protect networks from sophisticated threat actors.
+        <p style={{ maxWidth: '600px', marginBottom: '2.5rem', fontSize: '1rem', color: 'var(--text-muted)', lineHeight: '1.7' }}>
+          I’m a Cyber Security Analyst and Digital Forensics Investigator focused on understanding how attacks happen, how systems fail, and how evidence tells the real story behind an incident. My work combines security analysis, threat investigation, and practical problem-solving with a strong interest in real-world cyber defense and digital investigations.
         </p>
 
-        {/* Live Typing Terminal */}
-        <div className="cyber-terminal" style={{ width: '100%', marginBottom: '2.5rem' }}>
+        {/* Fully Keyboard-Interactive Terminal CLI */}
+        <div className="cyber-terminal" style={{ width: '100%', marginBottom: '2.5rem', cursor: 'text' }} onClick={focusInput}>
           <div className="terminal-header">
             <div className="terminal-dots">
               <span className="dot red"></span>
@@ -124,7 +149,7 @@ const Hero = () => {
             <div style={{ width: '38px' }}></div>
           </div>
           <div ref={terminalBodyRef} className="terminal-body mono">
-            {terminalLines.map((line, idx) => (
+            {history.map((line, idx) => (
               <div key={idx} className={line.type === 'cmd' ? 'terminal-cmd' : 'terminal-log'}>
                 {line.type === 'cmd' ? (
                   <span>
@@ -135,70 +160,113 @@ const Hero = () => {
                 )}
               </div>
             ))}
-            {activeSeqIndex < terminalSequences.length && terminalSequences[activeSeqIndex].type === 'cmd' && (
-              <div>
-                <span className="text-secondary">dhruvang@secops:~$</span> {currentTypedText}
-                <span className="cursor-blink" style={{ width: '8px', height: '1.2rem', display: 'inline-block', background: 'var(--primary-color)', verticalAlign: 'middle', marginLeft: '2px' }}></span>
-              </div>
-            )}
-            {activeSeqIndex < terminalSequences.length && terminalSequences[activeSeqIndex].type === 'log' && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span>Processing...</span>
-                <span className="cursor-blink" style={{ width: '8px', height: '1.2rem', display: 'inline-block', background: 'var(--secondary-color)', verticalAlign: 'middle' }}></span>
-              </div>
-            )}
+
+            {/* Input Row */}
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <span className="text-secondary" style={{ marginRight: '0.5rem' }}>dhruvang@secops:~$</span>
+              <input
+                ref={inputRef}
+                type="text"
+                value={inputVal}
+                onChange={(e) => setInputVal(e.target.value)}
+                onKeyDown={handleKeyDown}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  outline: 'none',
+                  color: 'var(--text-main)',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.9rem',
+                  flexGrow: 1,
+                  caretColor: 'var(--primary-color)'
+                }}
+                autoComplete="off"
+                spellCheck="false"
+              />
+            </div>
           </div>
         </div>
 
         <div className="flex gap-4" style={{ flexWrap: 'wrap' }}>
           <a href="#projects" className="cyber-button">
-            Decrypted Projects
+            View Projects
           </a>
-          <a href="#contact" className="cyber-button" style={{ background: 'transparent', borderColor: 'rgba(0,255,102,0.3)', color: 'var(--text-main)' }}>
+          <a href="#contact" className="cyber-button" style={{ background: 'transparent', borderColor: 'var(--border-color)', color: 'var(--text-main)' }}>
             Initiate Contact
           </a>
         </div>
       </div>
 
-      {/* High-fidelity Cybersecurity Animated Radar Visual */}
+      {/* Premium Professional Credentials & Commit Dashboard */}
       <div className="hero-visual animate-fade-in" style={{ flex: '1 1 350px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <div className="radar-container">
-          <div className="radar-circle radar-circle-1"></div>
-          <div className="radar-circle radar-circle-2"></div>
-          <div className="radar-circle radar-circle-3"></div>
+        <div className="glass-card" style={{ width: '100%', maxWidth: '380px', padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', boxShadow: 'var(--glow-shadow)', border: '1px solid var(--border-color)', borderRadius: '12px' }}>
 
-          <div className="radar-sweep"></div>
-          <div className="radar-crosshair"></div>
-
-          {/* Periodic radar ping dot */}
-          {pingPos.show && (
-            <div className="radar-ping" style={{ top: pingPos.top, left: pingPos.left }}></div>
-          )}
-
-          {/* Central Hologram Icon layer */}
-          <div style={{
-            position: 'absolute',
-            background: 'rgba(5, 11, 20, 0.9)',
-            border: '2px solid var(--primary-color)',
-            width: '100px', height: '100px',
-            borderRadius: '50%',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 0 30px rgba(0, 255, 102, 0.4)',
-            zIndex: 10
-          }}>
-            <Shield size={45} color="var(--primary-color)" style={{ filter: 'drop-shadow(0 0 8px rgba(0,255,102,0.6))' }} />
+          {/* Header */}
+          <div className="flex items-center gap-3" style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '1rem' }}>
+            <div style={{ background: 'rgba(16, 185, 129, 0.1)', padding: '0.50rem', borderRadius: '50%', color: 'var(--primary-color)' }}>
+              <Shield size={24} />
+            </div>
+            <div>
+              <h3 className="mono" style={{ fontSize: '1.1rem', fontWeight: 600 }}>OPERATIONS_RECORD</h3>
+              <p className="mono text-muted" style={{ fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                <MapPin size={12} /> Ahmedabad, Gujarat, India
+              </p>
+            </div>
           </div>
 
-          {/* Orbiting cyber indicators */}
-          <div style={{ position: 'absolute', top: '10%', left: '80%', display: 'flex', gap: '0.25rem', color: 'var(--secondary-color)', fontSize: '0.75rem' }} className="mono">
-            <Wifi size={14} /> <span>10.0.8.2</span>
+          {/* Operational Metrics */}
+          <div className="grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', textAlign: 'center' }}>
+            <div style={{ background: 'var(--bg-color)', padding: '0.75rem 0.5rem', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.03)' }}>
+              <h4 className="mono text-primary" style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>3</h4>
+              <p className="mono text-muted" style={{ fontSize: '0.65rem', textTransform: 'uppercase' }}>Commits</p>
+            </div>
+            <div style={{ background: 'var(--bg-color)', padding: '0.75rem 0.5rem', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.03)' }}>
+              <h4 className="mono text-secondary" style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>10</h4>
+              <p className="mono text-muted" style={{ fontSize: '0.65rem', textTransform: 'uppercase' }}>Threats</p>
+            </div>
+            <div style={{ background: 'var(--bg-color)', padding: '0.75rem 0.5rem', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.03)' }}>
+              <h4 className="mono text-primary" style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>1</h4>
+              <p className="mono text-muted" style={{ fontSize: '0.65rem', textTransform: 'uppercase' }}>Tools</p>
+            </div>
           </div>
-          <div style={{ position: 'absolute', bottom: '15%', left: '5%', display: 'flex', gap: '0.25rem', color: 'var(--primary-color)', fontSize: '0.75rem' }} className="mono">
-            <Cpu size={14} /> <span>CPU: 42%</span>
+
+          {/* GitHub Activity Simulation Grid */}
+          <div>
+            <p className="mono text-muted" style={{ fontSize: '0.7rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+              <GitCommit size={12} /> SEC_CONTRIBUTIONS_GRID
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(15, 1fr)', gap: '3px', background: 'var(--bg-color)', padding: '0.75rem', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.03)' }}>
+              {Array.from({ length: 45 }).map((_, i) => {
+                // Generate realistic github green contribution shades
+                let bg = 'rgba(255,255,255,0.05)';
+                if (i % 3 === 0) bg = 'rgba(16, 185, 129, 0.2)';
+                if (i % 7 === 0) bg = 'rgba(16, 185, 129, 0.5)';
+                if (i % 11 === 0) bg = 'rgba(16, 185, 129, 0.8)';
+                return (
+                  <div key={i} style={{ width: '100%', aspectRatio: '1', background: bg, borderRadius: '1.5px' }}></div>
+                );
+              })}
+            </div>
           </div>
-          <div style={{ position: 'absolute', top: '75%', right: '0%', display: 'flex', gap: '0.25rem', color: 'var(--text-muted)', fontSize: '0.75rem' }} className="mono">
-            <Server size={14} /> <span>SSH_ON</span>
+
+          {/* Certifications & Focus */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <p className="mono text-muted" style={{ fontSize: '0.7rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+              <Award size={12} /> SECURITY_CREDENTIALS
+            </p>
+            <ul className="mono" style={{ listStyle: 'none', paddingLeft: 0, fontSize: '0.8rem', color: 'var(--text-main)', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+              <li style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                <ChevronRight size={14} className="text-primary" /> Certified Information and Offensive Security Expert (CIOSE)
+              </li>
+              <li style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                <ChevronRight size={14} className="text-primary" /> Certified cyber defence professional (CCDP)
+              </li>
+              <li style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                <ChevronRight size={14} className="text-primary" />
+              </li>
+            </ul>
           </div>
+
         </div>
       </div>
     </section>
