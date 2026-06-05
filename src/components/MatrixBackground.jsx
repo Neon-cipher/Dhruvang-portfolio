@@ -1,7 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 
-const MatrixBackground = () => {
+const MatrixBackground = ({ theme }) => {
   const canvasRef = useRef(null);
+  const themeRef = useRef(theme);
+
+  // Sync theme changes to ref immediately so that draw loop sees it without DOM queries
+  useEffect(() => {
+    themeRef.current = theme;
+  }, [theme]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -9,12 +15,26 @@ const MatrixBackground = () => {
 
     const ctx = canvas.getContext('2d');
     let animationFrameId;
+    const fontSize = 14;
+    let columns = 0;
+    const rainDrops = [];
 
-    // Set canvas dimensions
+    // Set canvas dimensions and dynamically adjust columns without resetting state
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      const newColumns = Math.ceil(canvas.width / fontSize);
+
+      if (newColumns > columns) {
+        for (let x = columns; x < newColumns; x++) {
+          rainDrops[x] = Math.random() * -100; // stagger new columns
+        }
+      } else if (newColumns < columns) {
+        rainDrops.length = newColumns;
+      }
+      columns = newColumns;
     };
+
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
@@ -22,17 +42,8 @@ const MatrixBackground = () => {
     const chars = '0101010101ABCDEF/*-+=#!@$%^&[]{}<>sys.bin.exe.dll.sh';
     const alphabet = chars.split('');
 
-    const fontSize = 14;
-    const columns = Math.ceil(canvas.width / fontSize);
-
-    // Initial position for falling columns
-    const rainDrops = [];
-    for (let x = 0; x < columns; x++) {
-      rainDrops[x] = Math.random() * -100; // staggered start heights
-    }
-
     const draw = () => {
-      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      const isLight = themeRef.current === 'light';
 
       // Create trailing effect by overlaying semi-transparent background color
       ctx.fillStyle = isLight ? 'rgba(248, 250, 252, 0.12)' : 'rgba(5, 11, 20, 0.08)';

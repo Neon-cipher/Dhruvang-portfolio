@@ -21,7 +21,7 @@ const Layout = () => {
   return (
     <div className="app-container">
       {/* Matrix Falling Rain Background */}
-      <MatrixBackground />
+      <MatrixBackground theme={theme} />
 
       {/* CRT Scanline Overlay */}
       <div className="scanlines flicker"></div>

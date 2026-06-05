@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap');
-
 :root {
   --bg-color: #0a0f1d;
   --surface-color: #111827;
@@ -131,12 +129,14 @@ a:hover {
   position: relative;
   overflow: hidden;
   transition: var(--transition);
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
 .glass-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px) rotateX(4deg) rotateY(-2deg) translateZ(10px);
   border-color: var(--primary-color);
-  box-shadow: 0 10px 30px -10px rgba(0, 255, 102, 0.2);
+  box-shadow: 0 15px 35px -10px rgba(16, 185, 129, 0.25);
 }
 
 /* Buttons */
@@ -219,13 +219,21 @@ a:hover {
 }
 
 /* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes page3dEntrance {
+  from {
+    opacity: 0;
+    transform: rotateY(-10deg) translateZ(-120px) translateX(-25px);
+  }
+  to {
+    opacity: 1;
+    transform: rotateY(0deg) translateZ(0) translateX(0);
+  }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: page3dEntrance 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  perspective: 1200px;
+  transform-style: preserve-3d;
 }
 
 @keyframes glitch {
