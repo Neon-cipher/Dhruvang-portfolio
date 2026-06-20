@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { Terminal as TerminalIcon, Shield, ChevronRight, Cpu, GitCommit, Award, MapPin } from 'lucide-react';
 
 const Hero = () => {
@@ -13,6 +14,33 @@ const Hero = () => {
   ]);
   const [cmdHistory, setCmdHistory] = useState([]);
   const [cmdHistoryIndex, setCmdHistoryIndex] = useState(-1);
+
+  const [hoveredCell, setHoveredCell] = useState(null);
+
+  const contributions = React.useMemo(() => {
+    const data = [];
+    const now = new Date();
+    for (let i = 44; i >= 0; i--) {
+      const date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+      const day = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      
+      let commits = 0;
+      const rand = Math.random();
+      if (rand > 0.55) {
+        if (rand > 0.92) commits = Math.floor(Math.random() * 5) + 6;
+        else if (rand > 0.78) commits = Math.floor(Math.random() * 3) + 3;
+        else commits = Math.floor(Math.random() * 2) + 1;
+      }
+      
+      let bg = 'rgba(255,255,255,0.05)';
+      if (commits > 0 && commits <= 2) bg = 'rgba(16, 185, 129, 0.2)';
+      else if (commits > 2 && commits <= 5) bg = 'rgba(16, 185, 129, 0.5)';
+      else if (commits > 5) bg = 'rgba(16, 185, 129, 0.8)';
+      
+      data.push({ day, commits, bg });
+    }
+    return data;
+  }, []);
 
   const terminalBodyRef = useRef(null);
   const inputRef = useRef(null);
@@ -188,12 +216,12 @@ const Hero = () => {
         </div>
 
         <div className="flex gap-4" style={{ flexWrap: 'wrap' }}>
-          <a href="#projects" className="cyber-button">
+          <Link to="/projects" className="cyber-button">
             View Projects
-          </a>
-          <a href="#contact" className="cyber-button" style={{ background: 'transparent', borderColor: 'var(--border-color)', color: 'var(--text-main)' }}>
+          </Link>
+          <Link to="/contact" className="cyber-button" style={{ background: 'transparent', borderColor: 'var(--border-color)', color: 'var(--text-main)' }}>
             Initiate Contact
-          </a>
+          </Link>
         </div>
       </div>
 
@@ -232,20 +260,35 @@ const Hero = () => {
 
           {/* GitHub Activity Simulation Grid */}
           <div>
-            <p className="mono text-muted" style={{ fontSize: '0.7rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-              <GitCommit size={12} /> SEC_CONTRIBUTIONS_GRID
-            </p>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+              <p className="mono text-muted" style={{ fontSize: '0.7rem', display: 'flex', alignItems: 'center', gap: '0.25rem', margin: 0 }}>
+                <GitCommit size={12} /> SEC_CONTRIBUTIONS_GRID
+              </p>
+              {hoveredCell && (
+                <span className="mono text-primary animate-fade-in" style={{ fontSize: '0.65rem', background: 'rgba(16, 185, 129, 0.1)', padding: '2px 6px', borderRadius: '3px', border: '1px solid rgba(16, 185, 129, 0.15)' }}>
+                  {hoveredCell.commits} commit{hoveredCell.commits !== 1 ? 's' : ''} on {hoveredCell.day}
+                </span>
+              )}
+            </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(15, 1fr)', gap: '3px', background: 'var(--bg-color)', padding: '0.75rem', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.03)' }}>
-              {Array.from({ length: 45 }).map((_, i) => {
-                // Generate realistic github green contribution shades
-                let bg = 'rgba(255,255,255,0.05)';
-                if (i % 3 === 0) bg = 'rgba(16, 185, 129, 0.2)';
-                if (i % 7 === 0) bg = 'rgba(16, 185, 129, 0.5)';
-                if (i % 11 === 0) bg = 'rgba(16, 185, 129, 0.8)';
-                return (
-                  <div key={i} style={{ width: '100%', aspectRatio: '1', background: bg, borderRadius: '1.5px' }}></div>
-                );
-              })}
+              {contributions.map((cell, i) => (
+                <div
+                  key={i}
+                  onMouseEnter={() => setHoveredCell(cell)}
+                  onMouseLeave={() => setHoveredCell(null)}
+                  style={{
+                    width: '100%',
+                    aspectRatio: '1',
+                    background: cell.bg,
+                    borderRadius: '1.5px',
+                    cursor: 'pointer',
+                    transition: 'transform 0.1s ease, box-shadow 0.1s ease',
+                    transform: hoveredCell === cell ? 'scale(1.3)' : 'scale(1)',
+                    boxShadow: hoveredCell === cell ? '0 0 8px var(--primary-color)' : 'none',
+                    zIndex: hoveredCell === cell ? 10 : 1,
+                  }}
+                />
+              ))}
             </div>
           </div>
 
@@ -259,10 +302,7 @@ const Hero = () => {
                 <ChevronRight size={14} className="text-primary" /> Certified Information and Offensive Security Expert (CIOSE)
               </li>
               <li style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                <ChevronRight size={14} className="text-primary" /> Certified cyber defence professional (CCDP)
-              </li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                <ChevronRight size={14} className="text-primary" />
+                <ChevronRight size={14} className="text-primary" /> Certified Cyber Defense Professional (CCDP)
               </li>
             </ul>
           </div>

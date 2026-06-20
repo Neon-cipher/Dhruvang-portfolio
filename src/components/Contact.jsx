@@ -13,16 +13,16 @@ const Contact = () => {
           My inbox is always open. Whether you have an exciting project, a security consultation inquiry, or just want to discuss the latest zero-day, I'll try my best to get back to you!
         </p>
 
-        <a href="mailto:[dhruvangsanghavi13@gmail.com]" className="cyber-button" style={{ fontSize: '1.2rem', padding: '1rem 2.5rem', marginBottom: '3rem' }}>
+        <a href="mailto:dhruvangsanghavi13@gmail.com" className="cyber-button" style={{ fontSize: '1.2rem', padding: '1rem 2.5rem', marginBottom: '3rem' }}>
           <Mail size={24} />
           Send Transmission
         </a>
 
         <div className="flex justify-center gap-4" style={{ marginTop: '2rem' }}>
-          <a href="#" className="social-icon">
+          <a href="https://github.com/Neon-cipher" target="_blank" rel="noopener noreferrer" className="social-icon" title="GitHub Profile">
             <Code size={24} />
           </a>
-          <a href="https://www.linkedin.com/in/dhruvang-sanghavi-342108308" className="social-icon">
+          <a href="https://www.linkedin.com/in/dhruvang-sanghavi-342108308" target="_blank" rel="noopener noreferrer" className="social-icon" title="LinkedIn Profile">
             <Users size={24} />
           </a>
         </div>

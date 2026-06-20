@@ -43,6 +43,10 @@ const MatrixBackground = ({ theme }) => {
     const alphabet = chars.split('');
 
     const draw = () => {
+      if (document.visibilityState === 'hidden') {
+        return;
+      }
+
       const isLight = themeRef.current === 'light';
 
       // Create trailing effect by overlaying semi-transparent background color
@@ -86,8 +90,18 @@ const MatrixBackground = ({ theme }) => {
 
     draw();
 
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        cancelAnimationFrame(animationFrameId);
+        draw();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
     return () => {
       window.removeEventListener('resize', resizeCanvas);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
