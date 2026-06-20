@@ -10,6 +10,15 @@ const blogPosts = [
     excerpt: 'Let’s be honest, we all love how fast AI is moving.',
     link: 'https://medium.com/@dhruvangsanghavi13/the-ai-assistant-in-your-terminal-might-be-working-for-the-bad-guys-05e52ee4a665'
   },
+
+  {
+    id: 2,
+    title: 'Browser Forensics: Reconstructing User Activity Through Browser Artifacts — A Personal Digital Forensics Case Study',
+    date: '2026-06-20',
+    category: 'DFIR, Cyber Security',
+    excerpt: 'Web browsers record a significant amount of user activity, including visited websites, downloaded files, login sessions, search queries, and cached content.',
+    link: 'https://medium.com/@dhruvangsanghavi13/browser-forensics-reconstructing-user-activity-through-browser-artifacts-a-personal-digital-084c44bb2a32'
+  },
 ];
 
 const Blog = () => {
