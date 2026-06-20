@@ -510,6 +510,12 @@ a:hover {
   transition: var(--transition);
 }
 
+/* Mobile menu layout hidden on desktop by default */
+.mobile-menu-drawer,
+.mobile-menu-overlay {
+  display: none;
+}
+
 /* Mobile Optimization Overrides */
 @media (max-width: 768px) {
   .container {
@@ -597,6 +603,7 @@ a:hover {
   }
   
   .mobile-menu-overlay {
+    display: block;
     position: fixed;
     top: 0;
     left: 0;

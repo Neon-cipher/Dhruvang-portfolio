@@ -13,30 +13,6 @@ const projects = [
     ],
     tags: ['Python', 'SQLite', 'YARA', 'EvtxParser'],
     link: 'https://github.com/Neon-cipher/vortex-engine'
-  },
-  {
-    title: 'Malware Sandbox Pipeline',
-    type: 'Threat Intelligence',
-    desc: 'An automated threat intelligence pipeline that orchestrates malware execution in Cuckoo Sandbox, extracts behavioral indicators (network, file, and registry activities), and dynamically generates detection rules.',
-    highlights: [
-      'Orchestrates automated PE and ELF execution profiles across sandboxed guest VMs.',
-      'Parses memory dumps, network traffic PCAPs, and API trace logs to extract IOC indicators.',
-      'Automatically generates optimized YARA and SIGMA detection signatures based on malicious behavior patterns.'
-    ],
-    tags: ['Python', 'Cuckoo Sandbox', 'YARA', 'Threat Intel', 'API Analysis'],
-    link: '#'
-  },
-  {
-    title: 'Zero-Day Fuzzer',
-    type: 'Vulnerability Research',
-    desc: 'A custom network protocol fuzzer written in Rust, designed to identify memory corruption vulnerabilities (buffer overflows, use-after-free, memory leaks) in proprietary protocols.',
-    highlights: [
-      'Utilizes asynchronous networking to maximize fuzzing packet throughput.',
-      'Implements mutation-based payload generation with code coverage instrumentation guidance.',
-      'Automates crash dump capture and register state logging for immediate debugger analysis.'
-    ],
-    tags: ['Rust', 'Tokio', 'Fuzzing', 'Assembly', 'GDB'],
-    link: '#'
   }
 ];
 
